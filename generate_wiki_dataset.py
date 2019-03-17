@@ -31,7 +31,7 @@ GET_PAGES_QUERY = '''
                           ?article schema:inLanguage "en" .
                           ?article schema:isPartOf <https://en.wikipedia.org/> .
                     } 
-                    LIMIT 1
+                    LIMIT 100
                      '''
 
 def get_results(endpoint_url, query):
