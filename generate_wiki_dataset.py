@@ -15,23 +15,23 @@ from pymongo import MongoClient
 
 
 DB_NAME = 'wiki_stories'
-COL_NAME = 'all'
+COL_NAME = 'biographies'  # 'all'
 
 WIKIDATA_SPARQL_API = 'https://query.wikidata.org/sparql'
-# 'http://wikidata.communidata.at/wikidata/query'
+# filter out biography Wiki pages for entities that are humans
 GET_PAGES_QUERY = '''
                     PREFIX schema: <http://schema.org/>
                     PREFIX wikibase: <http://wikiba.se/ontology#>
                     PREFIX wd: <http://www.wikidata.org/entity/>
                     PREFIX wdt: <http://www.wikidata.org/prop/direct/>
-
                     SELECT DISTINCT ?cid ?label ?article WHERE {
                           ?cid rdfs:label ?label filter (lang(?label) = "en") .
+                          ?cid wdt:P31 wd:Q5 .
                           ?article schema:about ?cid .
                           ?article schema:inLanguage "en" .
                           ?article schema:isPartOf <https://en.wikipedia.org/> .
                     } 
-                    LIMIT 100
+                    LIMIT 100000
                      '''
 
 def get_results(endpoint_url, query):
@@ -99,4 +99,4 @@ if __name__ == '__main__':
         result['article']['story']['labels'] = story_labels
         result['article']['story']['URIs'] = story_URIs
         db = mongo_client[DB_NAME][COL_NAME].insert_one(result)
-        print(result)
+        # print(result)
