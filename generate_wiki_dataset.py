@@ -13,7 +13,10 @@ import requests, json
 from SPARQLWrapper import SPARQLWrapper, JSON
 from pymongo import MongoClient
 
+
 DB_NAME = 'wiki_stories'
+COL_NAME = 'all'
+
 WIKIDATA_SPARQL_API = 'https://query.wikidata.org/sparql'
 # 'http://wikidata.communidata.at/wikidata/query'
 GET_PAGES_QUERY = '''
@@ -95,5 +98,5 @@ if __name__ == '__main__':
         result['article']['summary']['URIs'] = summary_URIs
         result['article']['story']['labels'] = story_labels
         result['article']['story']['URIs'] = story_URIs
-        db = mongo_client[DB_NAME].insert_one(result)
+        db = mongo_client[DB_NAME][COL_NAME].insert_one(result)
         print(result)
