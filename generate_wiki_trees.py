@@ -85,11 +85,11 @@ def extract_story_tree(url):
     # get the corresponding Wiki page
     page = requests.get(url).text
     # get only the links from the article summary
-    summary_tree = get_wiki_tree(page, scrape.extract_summary_links)
+    summary_tree = get_wiki_tree(page, scrape_trees.extract_summary_links)
     # print(summary_URIs)
     print("Summary tree with %d branches extracted"%len(summary_tree))
     # get only the links from the article without the summary
-    story_tree = get_wiki_tree(page, scrape.extract_story_links)
+    story_tree = get_wiki_tree(page, scrape_trees.extract_story_links)
     print("Story URIs with %d branches extracted"%len(story_tree))
     return summary_tree, story_tree
 
