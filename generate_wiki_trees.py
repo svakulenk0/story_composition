@@ -55,7 +55,7 @@ def link_wiki_data(url):
 
 
 # collect story trees with the corresponding WikiData IDs
-def get_wiki_tree(scraper):
+def get_wiki_tree(page, scraper):
     '''
     scraper is a function extracting links from a Wiki page
     '''
