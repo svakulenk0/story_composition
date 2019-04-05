@@ -102,7 +102,7 @@ if __name__ == '__main__':
     for result in results["results"]["bindings"]:
         url = result['article']['value']
         result['_id'] = url
-        summary_tree, story_tree = extract_story_sequence(url)
+        summary_tree, story_tree = extract_story_tree(url)
         result['article']['summary'] = summary_tree
         result['article']['story'] = story_tree
         # db = mongo_client[DB_NAME][COL_NAME].insert_one(result)
