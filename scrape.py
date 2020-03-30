@@ -47,9 +47,33 @@ def get_paragraphs(page):
     temp = []
     for m in re.finditer(r"<p>(.*?)[\r\n]<\/p>", page):
         if m:
-            temp.append(m.groups()[0])
-            temp.append(" ")
-    return (" ".join(temp)).strip()
+            sentences = split_into_sentences(m.groups()[0])
+            temp.append(sentences)
+#             temp.append(" ")
+    return temp
+
+
+def get_article_tree(page):
+#     temp = []
+#     for m in re.finditer(r"<h2>(.*)[\r\n].*", page):
+#         if m:
+#             print(m.groups()[0])
+#             paragraphs = get_paragraphs(" ".join(m.groups()[0]))
+#             temp.append(paragraphs)
+# #             temp.append(" ")
+#     return temp
+
+    sentenceDivider = "(<h2>)"
+    temp = []
+    s = re.split(sentenceDivider, page)
+    for i in range(0, len(s) - 1, 2):
+        temp.append(get_paragraphs(s[i]))
+    return temp
+
+
+# get only text/HTML within <p></p> tags
+def get_paragraphs_text(page):
+    return (" ".join(get_paragraphs(page))).strip()
 
 
 def strip_tags(page):
@@ -184,6 +208,22 @@ def extract_summary_links(page):
     return extract_links(body)
 
 
+def extract_summary_paragraphs_links(page):
+    """
+    Extracts only the links from the summary of the article
+    """
+    body = get_body(page)
+    body = body[: re.search(r"<h2>", body).start()]
+    paragraphs = get_paragraphs(body)
+    p_links = []
+    for paragraph in paragraphs:
+        s_links = []
+        for sentence in paragraph:
+            s_links.append(extract_links(sentence))
+        p_links.append(s_links)
+    return p_links
+
+
 def extract_story_links(page):
     """
     Extracts only the links from the text of the article excluding the summary
@@ -195,8 +235,29 @@ def extract_story_links(page):
     return extract_links(body)
 
 
+def extract_story_paragraphs_links(page):
+    """
+    Extracts only the links from the summary of the article
+    """
+    body = get_body(page)
+    body = body[re.search(r"<h2>", body).start() :]
+#     print(body)
+    sections = get_article_tree(body)
+#     print(paragraphs)
+    tree = []
+    for paragraphs in sections:
+        p_links = []
+        for paragraph in paragraphs:
+            s_links = []
+            for sentence in paragraph:
+                s_links.append(extract_links(sentence))
+            p_links.append(s_links)
+        tree.append(p_links)
+    return tree
+
+
 def split_into_sentences(text):
-    sentenceDivider = "([.!?][\)]?) (?=[\(]?[A-Z])"
+    sentenceDivider = "([.!?][\)]?)(?=[\(]?)"
     temp = []
     s = re.split(sentenceDivider, text + " A")
     for i in range(0, len(s) - 1, 2):
