@@ -97,7 +97,7 @@ def get_pages(artist, header, pool):
 def load_urls(filename, n_top_headers):
     artists, artists_pages, artists_section_counter = count_headers(filename)
 
-    with open('./data/%s_urls.jsonl'%filename, 'w') as outfile:
+    with open('./data/%s_urls_%d.jsonl'%(filename, n_top_headers), 'w') as outfile:
         for i, artist in enumerate(artists):
             wiki_title = artists_pages[i]
             # start crawling pages by querying only by the page title
