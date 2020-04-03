@@ -70,9 +70,9 @@ def get_pages(artist, header, pool):
         for j, url in enumerate(urls):
             url = url[len("/l/?kh=-1&uddg="):]
             url = urllib.parse.unquote(url)
-            domain = url.split('//')[-1].split('/')[0].split('.')[1]
+            # domain = url.split('//')[-1].split('/')[0].split('.')[1]
             
-            if url not in pool and domain not in skip_domains:
+            if url not in pool: # and domain not in skip_domains:
                 print(url)
                 # parse page
                 text = ""
